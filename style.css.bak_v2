@@ -1,0 +1,1062 @@
+/* 古风扁平化水墨美学 - 梅花易数 CSS */
+
+/* 引入谷歌古风与现代中文字体 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500;700&family=ZCOOL+XiaoWei&display=swap');
+
+:root {
+    --bg-color: #f2f2f2;           /* 灰白底色 */
+    --card-bg: rgba(255, 255, 255, 0.72); /* 半透明白 */
+    --border-color: rgba(226, 223, 216, 0.7); /* 半透明灰 */
+    --border-color-active: #a9383b;/* 朱砂红激活边框 */
+    --text-primary: #2c2c2c;       /* 黛黑/深墨主字色 */
+    --text-muted: #5c5a55;         /* 灰色副字色 */
+    --gold: #b58d3d;               /* 青铜/暗金辅助色 */
+    --amber: #a9383b;              /* 朱砂红（代替琥珀） */
+    --crimson: #a9383b;            /* 朱砂印章红 */
+    --jade: #2d8a68;               /* 翡翠绿 */
+    --font-fancy: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+    --font-body: 'Noto Serif SC', serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: url("ink_wash_bg.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* 鏆楄壊纾ㄧ爞鑳屾櫙瑕嗙洊灞?*/
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 10, 0.72);
+    backdrop-filter: blur(5px) brightness(0.6) contrast(1.1);
+    -webkit-backdrop-filter: blur(5px) brightness(0.6) contrast(1.1);
+    z-index: -1;
+    pointer-events: none;
+}
+
+html, body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* 动态水墨晕染背景 */
+.ink-stain {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.08; /* 增强水墨可见度 */
+    mix-blend-mode: multiply;
+}
+.stain-top {
+    top: -150px;
+    left: -150px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 0%, rgba(0,0,0,0.1) 40%, transparent 70%);
+    filter: blur(30px);
+}
+.stain-bottom {
+    bottom: -150px;
+    right: -150px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 0%, rgba(0,0,0,0.08) 50%, transparent 75%);
+    filter: blur(40px);
+}
+
+.container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3.5rem 2.5rem;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 标题样式 */
+header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.header-stamp {
+    display: inline-block;
+    border: 2px solid var(--crimson);
+    color: var(--crimson);
+    font-family: var(--font-fancy);
+    font-size: 1.25rem;
+    font-weight: bold;
+    padding: 0.2rem 0.6rem;
+    margin-bottom: 0.8rem;
+    transform: rotate(-3deg);
+    border-radius: 4px;
+    box-shadow: 0 0 2px rgba(169, 56, 59, 0.1);
+    background: rgba(169, 56, 59, 0.02);
+}
+
+header h1 {
+    font-family: var(--font-fancy);
+    font-size: 2.8rem;
+    letter-spacing: 0.4rem;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    letter-spacing: 0.15rem;
+}
+
+/* 主面板结构 */
+.divination-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    width: 100%;
+    margin-bottom: 3rem;
+}
+
+@media (min-width: 1024px) {
+    .divination-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 卡片样式 */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 32px rgba(44, 44, 44, 0.05);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    width: 100%;
+}
+
+.card:hover {
+    border-color: var(--border-color-active);
+    box-shadow: 0 12px 40px rgba(169, 56, 59, 0.1);
+    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+}
+
+h2 {
+    font-family: var(--font-fancy);
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* 表单选择器 */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+/* 自定义选择卡片 */
+.option-tabs {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.tab-btn {
+    flex: 1;
+    background: rgba(240, 238, 233, 0.85);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 0.5rem 0.2rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    color: var(--crimson);
+    border-color: var(--crimson);
+}
+
+.tab-btn.active {
+    background: var(--crimson);
+    color: #ffffff;
+    border-color: var(--crimson);
+    font-weight: 500;
+}
+
+/* 输入框、下拉菜单 */
+input[type="text"], input[type="number"], input[type="date"], select {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.7rem;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--crimson);
+    box-shadow: 0 0 5px rgba(169, 56, 59, 0.15);
+}
+
+/* 起卦方法面板 */
+.method-panel {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.method-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 手动时间选择行 */
+.time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+/* 占卜按钮 */
+.divine-btn {
+    width: 100%;
+    background: var(--crimson);
+    border: 1px solid var(--crimson);
+    color: #ffffff;
+    font-family: var(--font-fancy);
+    font-size: 1.4rem;
+    font-weight: bold;
+    padding: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(169, 56, 59, 0.15);
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    letter-spacing: 0.3rem;
+}
+
+.divine-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(169, 56, 59, 0.3);
+    filter: brightness(1.1);
+}
+
+.divine-btn:active {
+    transform: translateY(1px);
+}
+
+/* 占卜结果板块 */
+.result-section {
+    display: none; /* 初始隐藏 */
+    animation: fadeIn 0.6s ease forwards;
+    width: 100%;
+}
+
+.result-section.active {
+    display: block;
+}
+
+/* 卦象展示卡片列表 */
+.hexagram-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 600px) {
+    .hexagram-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.hexa-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(226, 223, 216, 0.6);
+    border-radius: 10px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: all 0.4s ease;
+}
+
+.hexa-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(44, 44, 44, 0.06);
+    border-color: rgba(169, 56, 59, 0.4);
+}
+
+
+
+.hexa-type {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.hexa-name {
+    font-family: var(--font-fancy);
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+/* 绘制易经爻线 (Yin & Yang Lines) */
+.lines-graphic {
+    display: flex;
+    flex-direction: column-reverse; /* 自下而上 */
+    gap: 10px;
+    margin: 1.5rem auto;
+    width: 140px;
+}
+
+.line-container {
+    height: 14px;
+    width: 100%;
+    position: relative;
+}
+
+/* 阳爻 (一整条) */
+.yang-line {
+    height: 100%;
+    width: 100%;
+    background: var(--text-primary);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* 阴爻 (两截) */
+.yin-line {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+}
+
+.yin-part {
+    width: 44%;
+    height: 100%;
+    background: var(--text-primary);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* 动爻激活与闪烁（不改底色，只加红边与外发光和红点提示） */
+.line-container.moving .yang-line,
+.line-container.moving .yin-part {
+    box-shadow: 0 0 10px rgba(169, 56, 59, 0.7);
+    animation: pulse 1.5s infinite ease-in-out;
+    border: 1px solid var(--crimson) !important;
+}
+
+.line-label {
+    position: absolute;
+    left: -48px;
+    top: -1px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    width: 40px;
+    text-align: right;
+}
+
+.line-container.moving::after {
+    content: '● 动';
+    position: absolute;
+    right: -52px;
+    top: -1px;
+    font-size: 0.8rem;
+    color: var(--crimson);
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; filter: brightness(1.2); }
+    100% { opacity: 0.7; }
+}
+
+@keyframes rotate-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.hexa-symbol {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin: 0.4rem 0;
+}
+
+.trigram-labels {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* 严格匹配木(绿)/火(红)/土(黄)/金(白)/水(黑)的五行色彩 */
+.trigram-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+.elem-木 { background-color: #2d8a68 !important; color: #ffffff !important; border: none !important; }
+.elem-火 { background-color: #b23a3a !important; color: #ffffff !important; border: none !important; }
+.elem-土 { background-color: #b58d3d !important; color: #ffffff !important; border: none !important; }
+.elem-金 { background-color: #ffffff !important; border: 1px solid #c0c0c0 !important; color: #2c2c2c !important; }
+.elem-水 { background-color: #1a1a1a !important; color: #ffffff !important; border: none !important; }
+
+/* 核心解析面板 */
+.analysis-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+@media (min-width: 800px) {
+    .analysis-panel {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* 体用卡片 */
+.ti-yong-box {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(226, 223, 216, 0.6);
+    border-radius: 10px;
+    padding: 2.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: all 0.4s ease;
+}
+
+.ti-yong-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(44, 44, 44, 0.06);
+}
+
+.ti-yong-title {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.4rem;
+    font-family: var(--font-fancy);
+}
+
+.ti-yong-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.ti-yong-item {
+    width: 46%;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem 0.5rem;
+}
+
+.ti-yong-item.ti { }
+.ti-yong-item.yong { }
+
+.ti-yong-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.3rem;
+}
+
+.ti-yong-name {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+    font-family: var(--font-fancy);
+}
+
+.ti-yong-elem {
+    display: inline-block;
+    padding: 0.15rem 0.65rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-top: 0.4rem;
+    font-weight: bold;
+}
+
+/* 综合吉凶评分图表 */
+.score-box {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(226, 223, 216, 0.6);
+    border-radius: 10px;
+    padding: 2.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: all 0.4s ease;
+}
+
+.score-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(44, 44, 44, 0.06);
+}
+
+.gauge-chart {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-progress {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #ffffff 79%, transparent 80% 100%),
+                conic-gradient(var(--crimson) var(--progress-deg, 0deg), #f4f2ec 0deg);
+}
+
+.gauge-val {
+    position: absolute;
+    font-family: var(--font-fancy);
+    font-size: 2.2rem;
+    color: var(--crimson);
+}
+
+.badge-level {
+    margin-top: 1rem;
+    padding: 0.3rem 1.5rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-family: var(--font-fancy);
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    text-align: center;
+}
+
+.level-大吉 { background: rgba(45, 138, 104, 0.08); border: 1px solid var(--jade); color: var(--jade); }
+.level-吉 { background: rgba(229, 169, 59, 0.08); border: 1px solid var(--gold); color: var(--gold); }
+.level-小吉 { background: #fdfcf9; border: 1px solid var(--border-color); color: var(--text-primary); }
+.level-平 { background: #fdfcf9; border: 1px solid var(--border-color); color: var(--text-muted); }
+.level-小凶 { background: rgba(217, 56, 56, 0.05); border: 1px solid var(--crimson); color: var(--crimson); }
+.level-大凶 { background: rgba(217, 56, 56, 0.1); border: 1px solid var(--crimson); color: var(--crimson); }
+
+/* 解析条目 */
+.detail-item {
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(226, 223, 216, 0.5);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    border-color: rgba(169, 56, 59, 0.3);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.detail-item h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.6rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 0.4rem;
+}
+
+.detail-item p {
+    color: var(--text-primary);
+    font-size: 0.98rem;
+    text-align: justify;
+    line-height: 1.7;
+}
+
+/* 八卦方位与详解部分 */
+.bagua-encyclopedia {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.bagua-wheel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+@media (min-width: 700px) {
+    .bagua-wheel-container {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+}
+
+.bagua-wheel {
+    width: 320px;
+    height: 320px;
+    position: relative;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.85) 40%, rgba(245, 243, 238, 0.9) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 32px rgba(44, 44, 44, 0.08);
+}
+
+.wheel-center {
+    width: 72px;
+    height: 72px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%232c2c2c' d='M50 0A50 50 0 0 0 50 100A50 50 0 0 0 50 0ZM50 50A10 10 0 1 1 50 30A10 10 0 0 1 50 50ZM50 70A10 10 0 1 1 50 90A10 10 0 0 1 50 70ZM50 100A20 20 0 0 0 50 60A20 20 0 0 1 50 20A20 20 0 0 0 50 0A50 50 0 0 0 50 100Z'/%3E%3C/svg%3E") no-repeat center;
+    background-size: contain;
+    z-index: 2;
+    animation: rotate-slow 30s linear infinite;
+}
+
+.gua-node {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--border-color);
+}
+
+.gua-node:hover {
+    transform: scale(1.15);
+    border-color: var(--crimson);
+    box-shadow: 0 0 10px rgba(169, 56, 59, 0.2);
+}
+
+.gua-node .symbol {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.gua-node .name {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.1;
+}
+
+/* 交互卡片定位 - 精确圆形分布，半径102px，中心点160px */
+.gua-0 { top: 20px; left: 128px; }      /* 南 离 */
+.gua-1 { top: 52px; left: 204px; }      /* 东南 巽 */
+.gua-2 { top: 128px; left: 236px; }     /* 东 震 */
+.gua-3 { top: 204px; left: 204px; }     /* 东北 艮 */
+.gua-4 { top: 236px; left: 128px; }     /* 北 坎 */
+.gua-5 { top: 204px; left: 52px; }      /* 西北 乾 */
+.gua-6 { top: 128px; left: 20px; }      /* 西 兑 */
+.gua-7 { top: 52px; left: 52px; }       /* 西南 坤 */
+
+.bagua-details {
+    flex: 1;
+    max-width: 550px;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(226, 223, 216, 0.6);
+    border-radius: 10px;
+    padding: 2.2rem;
+    width: 100%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.bagua-details h4 {
+    font-family: var(--font-fancy);
+    color: var(--crimson);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bagua-details p {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    text-align: justify;
+}
+
+/* AI loading 旋转阴阳 icon */
+.spinner {
+    animation: rotate-slow 2s linear infinite;
+}
+
+/* 版权及注脚 */
+footer {
+    text-align: center;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.1rem;
+    width: 100%;
+}
+
+/* 卦辞详解专属板块样式 */
+.explanation-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.8rem !important;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid rgba(226, 223, 216, 0.6) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    text-align: left;
+}
+
+.explanation-block:last-child {
+    margin-bottom: 0;
+}
+
+.block-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+    position: relative;
+    width: 100%;
+}
+
+.block-title h3 {
+    font-family: var(--font-fancy);
+    font-size: 1.35rem;
+    color: var(--text-primary);
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.block-badge {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.badge-ben { background-color: var(--gold); }
+.badge-hu { background-color: var(--text-muted); }
+.badge-bian { background-color: var(--crimson); }
+
+.block-symbol {
+    position: absolute;
+    right: 0;
+    top: -5px;
+    font-size: 2.2rem;
+    opacity: 0.15;
+    color: var(--text-primary);
+    font-family: var(--font-fancy);
+}
+
+.block-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+}
+
+@media (min-width: 640px) {
+    .info-row {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0;
+    }
+    
+    .info-label {
+        width: 110px;
+        flex-shrink: 0;
+    }
+}
+
+.info-label {
+    font-weight: bold;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.info-value {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.text-highlight {
+    color: var(--crimson);
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.text-muted-highlight {
+    color: var(--text-muted);
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.text-yili {
+    font-style: italic;
+    color: #3b3a36;
+    background: rgba(0, 0, 0, 0.015);
+    padding: 0.5rem 0.8rem;
+    border-left: 2px solid var(--border-color);
+    border-radius: 0 4px 4px 0;
+}
+
+/* 缁撴灉鐗堝潡瀛愬厓绱犻棿璺濓紝闃叉閲嶅彔 */
+.result-section > * {
+    margin-bottom: 2rem !important;
+}
+.result-section > *:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* 鍏崷鏂逛綅涓庤瑙ｇ綉鏍煎竷灞€ */
+.bagua-features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 1rem;
+    text-align: left;
+}
+
+@media (min-width: 480px) {
+    .bagua-features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.feature-item {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+    text-align: left;
+}
+
+.feature-item strong {
+    color: var(--gold);
+    margin-right: 0.3rem;
+}
+
+/* ==========================================================================
+   交互流重构样式 (单栏居中/返回按钮/隐藏逻辑)
+   ========================================================================== */
+
+/* 占卜流程隐藏/显示控制 */
+.bagua-encyclopedia.hidden {
+    display: none !important;
+}
+
+.divination-grid.only-input {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    max-width: 540px !important; /* 限制输入面板的最大宽度，使其更紧凑美观 */
+    margin: 0 auto 3rem auto !important;
+}
+
+.divination-grid.only-input #input-card {
+    width: 100% !important;
+}
+
+/* 返回重新占卜按钮 */
+.back-btn-container {
+    text-align: left;
+    margin-bottom: 2rem;
+    animation: fadeIn 0.6s ease forwards;
+    width: 100%;
+}
+
+.back-to-input-btn {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.65rem 1.6rem;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-to-input-btn:hover {
+    border-color: var(--border-color-active);
+    color: var(--crimson);
+    transform: translateX(-4px); /* 悬浮微动画向左滑动，呼应“返回” */
+    box-shadow: 0 8px 25px rgba(169, 56, 59, 0.08);
+}
+
+.back-to-input-btn:active {
+    transform: translateX(-2px);
+}
+
+/* ==========================================================================
+   卦象侧边体用与生克箭头样式
+   ========================================================================== */
+.hexagram-lines-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    margin: 1.5rem auto;
+    width: 250px;
+    position: relative;
+}
+
+.hexagram-lines-wrapper .lines-graphic {
+    margin: 0 !important; /* 覆盖原有的居中 margin */
+}
+
+.lines-side-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 134px; /* 精确对应 6 爻图形的像素高度 */
+    width: 54px;
+    position: relative;
+    padding: 6px 0;
+    align-items: center;
+}
+
+.side-role {
+    font-size: 0.78rem;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    line-height: 1.2;
+    z-index: 2;
+    text-shadow: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    text-align: center;
+}
+
+.role-ti {
+    background-color: var(--gold) !important;
+}
+
+.role-yong {
+    background-color: var(--crimson) !important;
+}
+
+.role-hu {
+    background-color: var(--text-muted) !important;
+}
+
+.side-arrow-svg {
+    position: absolute;
+    top: 24px;
+    height: 86px;
+    width: 32px;
+    z-index: 1;
+    overflow: visible;
+}

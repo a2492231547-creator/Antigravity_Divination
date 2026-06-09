@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>水墨天机 - AntiGravity占卜</title>
+    <link rel="icon" type="image/x-icon" href="taiji_icon.ico">
+    <!-- 引入样式表 -->
+    <link rel="stylesheet" href="style.css">
+    <!-- 引入 solarlunar CDN 用于公历转农历 -->
+    <script src="solarlunar.min.js"></script>
+</head>
+<body>
+    <!-- 动态水墨背景晕染层 -->
+    <div class="ink-stain stain-top"></div>
+    <div class="ink-stain stain-bottom"></div>
+
+    <div class="container">
+        <!-- 头部标题 -->
+        <header>
+            <div class="header-stamp">梅花易数</div>
+            <h1>AntiGravity占卜</h1>
+            <p>—— 顺应乾坤 · 默契天机 ——</p>
+        </header>
+
+        <!-- 主面板 -->
+        <div class="divination-grid only-input">
+            
+            <!-- 左侧：输入控制区 -->
+            <div class="card" id="input-card">
+                <h2><span>🖋️</span> 占问起卦</h2>
+                
+                <!-- 占卜具体问题（新增） -->
+                <div class="form-group">
+                    <label for="divination-question">占问具体事宜（选填，字数不限）</label>
+                    <input type="text" id="divination-question" placeholder="例如：我的钱包丢在客厅了吗？/ 明天会下雨吗？">
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">系统将智能识别求问类型，自动匹配天气、失物名词及专属断语。</p>
+                </div>
+
+                <!-- 占卜目的 -->
+                <div class="form-group">
+                    <label>选择占语类别</label>
+                    <div class="option-tabs" id="purpose-tabs">
+                        <div class="tab-btn active" data-value="lost">失物占</div>
+                        <div class="tab-btn" data-value="fortune">吉凶占</div>
+                    </div>
+                </div>
+
+                <!-- 起卦方式 -->
+                <div class="form-group">
+                    <label>起卦算法</label>
+                    <div class="option-tabs" id="method-tabs">
+                        <div class="tab-btn active" data-value="time">时间起卦</div>
+                        <div class="tab-btn" data-value="number">以数起卦</div>
+                        <div class="tab-btn" data-value="text">字数起卦</div>
+                    </div>
+                </div>
+
+                <!-- 方式1：时间起卦面板 -->
+                <div class="method-panel active" id="panel-time">
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <label style="margin-bottom: 0;">日期与时辰</label>
+                            <span style="color: var(--amber); font-size: 0.8rem; cursor: pointer; text-decoration: underline;" id="toggle-manual-time">
+                                ⚙️ 手动农历输入
+                            </span>
+                        </div>
+                        
+                        <div class="time-row" id="auto-time-inputs">
+                            <input type="date" id="solar-date">
+                            <select id="solar-hour">
+                                <option value="1">子时 (23:00-01:00)</option>
+                                <option value="2">丑时 (01:00-03:00)</option>
+                                <option value="3">寅时 (03:00-05:00)</option>
+                                <option value="4">卯时 (05:00-07:00)</option>
+                                <option value="5">辰时 (07:00-09:00)</option>
+                                <option value="6">巳时 (09:00-11:00)</option>
+                                <option value="7">午时 (11:00-13:00)</option>
+                                <option value="8">未时 (13:00-15:00)</option>
+                                <option value="9">申时 (15:00-17:00)</option>
+                                <option value="10">酉时 (17:00-19:00)</option>
+                                <option value="11">戌时 (19:00-21:00)</option>
+                                <option value="12">亥时 (21:00-23:00)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- 手动农历备用输入，默认隐藏 -->
+                        <div id="manual-time-inputs" style="display: none; border: 1px solid var(--border-color); padding: 1rem; border-radius: 6px; margin-top: 0.5rem; background: rgba(0,0,0,0.02);">
+                            <div class="form-group">
+                                <label>年支 (生肖)</label>
+                                <select id="lunar-year-branch">
+                                    <option value="1">子 (鼠)</option>
+                                    <option value="2">丑 (牛)</option>
+                                    <option value="3">寅 (虎)</option>
+                                    <option value="4">卯 (兔)</option>
+                                    <option value="5">辰 (龙)</option>
+                                    <option value="6">巳 (蛇)</option>
+                                    <option value="7" selected>午 (马)</option>
+                                    <option value="8">未 (羊)</option>
+                                    <option value="9">申 (猴)</option>
+                                    <option value="10">酉 (鸡)</option>
+                                    <option value="11">戌 (狗)</option>
+                                    <option value="12">亥 (猪)</option>
+                                </select>
+                            </div>
+                            <div class="time-row">
+                                <div class="form-group">
+                                    <label>农历月份</label>
+                                    <input type="number" id="lunar-month" min="1" max="12" placeholder="输入月份 (1-12)">
+                                </div>
+                                <div class="form-group">
+                                    <label>农历日期</label>
+                                    <input type="number" id="lunar-day" min="1" max="30" placeholder="输入日期 (1-30)">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label>起卦时辰</label>
+                                <select id="lunar-hour-branch">
+                                    <option value="1">子时 (23-01)</option>
+                                    <option value="2">丑时 (01-03)</option>
+                                    <option value="3">寅时 (03-05)</option>
+                                    <option value="4">卯时 (05-07)</option>
+                                    <option value="5">辰时 (07-09)</option>
+                                    <option value="6">巳时 (09-11)</option>
+                                    <option value="7" selected>午时 (11-13)</option>
+                                    <option value="8">未时 (13-15)</option>
+                                    <option value="9">申时 (15-17)</option>
+                                    <option value="10">酉时 (17-19)</option>
+                                    <option value="11">戌时 (19-21)</option>
+                                    <option value="12">亥时 (21-23)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 方式2：以数起卦面板 -->
+                <div class="method-panel" id="panel-number">
+                    <div class="form-group">
+                        <label>第一个数 (对应上卦)</label>
+                        <input type="number" id="num-upper" placeholder="输入任意数字，如 38">
+                    </div>
+                    <div class="form-group">
+                        <label>第二个数 (对应下卦)</label>
+                        <input type="number" id="num-lower" placeholder="输入任意数字，如 48">
+                    </div>
+                    <div class="form-group">
+                        <label>起卦时辰</label>
+                        <select id="num-hour">
+                            <option value="1">子时 (23-01)</option>
+                            <option value="2">丑时 (01-03)</option>
+                            <option value="3">寅时 (03-05)</option>
+                            <option value="4">卯时 (05-07)</option>
+                            <option value="5">辰时 (07-09)</option>
+                            <option value="6">巳时 (09-11)</option>
+                            <option value="7" selected>午时 (11-13)</option>
+                            <option value="8">未时 (13-15)</option>
+                            <option value="9">申时 (15-17)</option>
+                            <option value="10">酉时 (17-19)</option>
+                            <option value="11">戌时 (19-21)</option>
+                            <option value="12">亥时 (21-23)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 方式3：字数起卦面板 -->
+                <div class="method-panel" id="panel-text">
+                    <div class="form-group">
+                        <label>写下一词或短句 (直接以此起卦)</label>
+                        <input type="text" id="text-phrase" placeholder="例如：明天会下雨吗">
+                    </div>
+                </div>
+
+                <!-- 占卜按钮 -->
+                <button class="divine-btn" id="start-divine">问问乾坤</button>
+            </div>
+
+            <!-- 右侧：占卜结果展示 -->
+            <div class="result-section" id="result-display">
+                <!-- 返回重新占卜按钮 -->
+                <div class="back-btn-container">
+                    <button class="back-to-input-btn" id="btn-back-to-input">
+                        <span>←</span> 返回重新占卜
+                    </button>
+                </div>
+
+                <!-- 卦象排盘 -->
+                <div class="card">
+                    <h2><span>☯️</span> 水墨排盘</h2>
+                    <div class="hexagram-container">
+                        
+                        <!-- 本卦 -->
+                        <div class="hexa-card ben">
+                            <div class="hexa-type">本卦（事之始）</div>
+                            <div class="hexa-name" id="ben-name">风雷益</div>
+                            <div class="hexa-symbol" id="ben-symbol">䷩</div>
+                            <div class="hexagram-lines-wrapper">
+                                <div class="lines-graphic" id="ben-lines">
+                                    <!-- 由JS生成 -->
+                                </div>
+                                <div class="lines-side-info" id="ben-side-info"></div>
+                            </div>
+                            <div class="trigram-labels">
+                                <span id="ben-upper-label" class="trigram-badge">巽(木)</span>
+                                <span id="ben-lower-label" class="trigram-badge">震(木)</span>
+                            </div>
+                        </div>
+
+                        <!-- 互卦 -->
+                        <div class="hexa-card hu">
+                            <div class="hexa-type">互卦 (中演变)</div>
+                            <div class="hexa-name" id="hu-name">山地剥</div>
+                            <div class="hexa-symbol" id="hu-symbol">䷖</div>
+                            <div class="hexagram-lines-wrapper">
+                                <div class="lines-graphic" id="hu-lines">
+                                    <!-- 由JS生成 -->
+                                </div>
+                                <div class="lines-side-info" id="hu-side-info"></div>
+                            </div>
+                            <div class="trigram-labels">
+                                <span id="hu-upper-label" class="trigram-badge">艮(土)</span>
+                                <span id="hu-lower-label" class="trigram-badge">坤(土)</span>
+                            </div>
+                        </div>
+
+                        <!-- 变卦 -->
+                        <div class="hexa-card bian">
+                            <div class="hexa-type">变卦（事之终）</div>
+                            <div class="hexa-name" id="bian-name">风泽中孚</div>
+                            <div class="hexa-symbol" id="bian-symbol">䷼</div>
+                            <div class="hexagram-lines-wrapper">
+                                <div class="lines-graphic" id="bian-lines">
+                                    <!-- 由JS生成 -->
+                                </div>
+                                <div class="lines-side-info" id="bian-side-info"></div>
+                            </div>
+                            <div class="trigram-labels">
+                                <span id="bian-upper-label" class="trigram-badge">巽(木)</span>
+                                <span id="bian-lower-label" class="trigram-badge">兑(金)</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- 天机直断（智能问事） -->
+                <div class="card direct-answer-card" id="direct-answer-card" style="display: none; margin-bottom: 2rem;">
+                    <h2 style="border-bottom: none; margin-bottom: 0.5rem; padding-bottom: 0;"><span style="color: var(--crimson);">🎯</span> 天机直断</h2>
+                    <div id="direct-answer-text" style="font-size: 1.25rem; font-weight: bold; color: var(--crimson); margin-bottom: 0.8rem;">
+                        <!-- 动态答案 -->
+                    </div>
+                    <p id="direct-answer-detail" style="font-size: 0.95rem; color: var(--text-primary); text-align: justify; line-height: 1.6;">
+                        <!-- 动态细节 -->
+                    </p>
+                </div>
+
+                <!-- 体用与吉凶综合盘 -->
+                <div class="analysis-panel">
+                    <!-- 体用面板 -->
+                    <div class="ti-yong-box">
+                        <div class="ti-yong-title">体用相生克解析</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;" id="ti-yong-summary">
+                            起卦法：时间起卦。动爻在二爻。下卦为用，上卦为体。
+                        </div>
+                        <div class="ti-yong-row">
+                            <div class="ti-yong-item ti">
+                                <div class="ti-yong-label">体卦 (主/己)</div>
+                                <div class="ti-yong-name" id="ti-name">巽</div>
+                                <div class="ti-yong-elem elem-木" id="ti-elem">木</div>
+                            </div>
+                            <div class="shengke-sign-box" id="shengke-sign">
+                                比和 ☯
+                            </div>
+                            <div class="ti-yong-item yong">
+                                <div class="ti-yong-label">用卦 (客/事)</div>
+                                <div class="ti-yong-name" id="yong-name">震</div>
+                                <div class="ti-yong-elem elem-木" id="yong-elem">木</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.9rem; border-top: 1px dashed var(--border-color); padding-top: 0.8rem; text-align: justify;" id="shengke-text">
+                            体用比和。主吉。表示自身与外界和谐共处，运势平稳。
+                        </div>
+                    </div>
+
+                    <!-- 综合评分 -->
+                    <div class="score-box">
+                        <div class="ti-yong-title" style="margin-bottom: 0.5rem;">天机评分 (卦象契合度)</div>
+                        <div class="gauge-chart">
+                            <div class="circular-progress" id="score-progress"></div>
+                            <div class="gauge-val" id="score-val">80%</div>
+                        </div>
+                        <div class="badge-level level-吉" id="level-badge">大吉</div>
+                    </div>
+                </div>
+
+                <!-- 详细断语面板 -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2><span>📝</span> 天机奥义详解</h2>
+                    
+                    <!-- 失物占结果 -->
+                    <div id="lost-result-panel" style="display: none;">
+                        <div class="detail-item">
+                            <h3>🔍 能否寻回</h3>
+                            <p id="lost-findable">极易找到。用生体之象，物品没有离远，会在近期自己现身或被他人归还。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>🧭 藏匿方位</h3>
+                            <p id="lost-direction">东南方位。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>🏡 环境意象</h3>
+                            <p id="lost-environment">多位于高处、花草堆中，或者通风良好、细长空洞的容器旁边。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>⏰ 应期时间</h3>
+                            <p id="lost-time">解卦暂无应期。</p>
+                        </div>
+                    </div>
+
+                    <!-- 吉凶占结果 -->
+                    <div id="fortune-result-panel" style="display: none;">
+                        <div class="detail-item">
+                            <h3>✨ 吉凶总断</h3>
+                            <p id="fortune-summary">本次占卜综合断定为：【吉】。事情发展顺利，有多方支持，但须戒骄戒躁。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>🌱 初始契机（本卦卦意）</h3>
+                            <p id="fortune-stage1">风雷益。损上益下，大吉大利。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>⚡ 变数演化（互卦过程）</h3>
+                            <p id="fortune-stage2">山地剥。过程中会有一些不明显的阻碍或利益剥落，要谨慎低调。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>🏆 终局走向（变卦结局）</h3>
+                            <p id="fortune-stage3">风泽中孚。最终以诚信待人，深入人心，取得最终的稳固收获。</p>
+                        </div>
+                        <div class="detail-item">
+                            <h3>💡 启示与建议</h3>
+                            <p id="fortune-advice">适合推进计划，精诚合作。不要过于急躁，稳步推展便无咎。</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 卦辞与易理详解 -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <h2><span>📖</span> 卦辞与易理详解</h2>
+                    
+                    <div class="detail-item explanation-block">
+                        <div class="block-title ben-title">
+                            <span class="block-badge badge-ben">本卦</span>
+                            <h3>《<span id="ben-judgement-name">-</span>》</h3>
+                            <span class="block-symbol" id="ben-judgement-symbol">䷩</span>
+                        </div>
+                        <div class="block-content">
+                            <div class="info-row">
+                                <span class="info-label">【卦象结构】</span>
+                                <span class="info-value" id="ben-judgement-struct">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【卦辞原文】</span>
+                                <span class="info-value text-highlight" id="ben-judgement-text">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【核心卦意】</span>
+                                <span class="info-value" id="ben-judgement-desc">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【易理详析】</span>
+                                <span class="info-value text-yili" id="ben-judgement-yili">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item explanation-block">
+                        <div class="block-title hu-title">
+                            <span class="block-badge badge-hu">互卦</span>
+                            <h3>《<span id="hu-judgement-name">-</span>》</h3>
+                            <span class="block-symbol" id="hu-judgement-symbol">䷖</span>
+                        </div>
+                        <div class="block-content">
+                            <div class="info-row">
+                                <span class="info-label">【卦象结构】</span>
+                                <span class="info-value" id="hu-judgement-struct">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【卦辞原文】</span>
+                                <span class="info-value text-muted-highlight" id="hu-judgement-text">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【核心卦意】</span>
+                                <span class="info-value" id="hu-judgement-desc">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【易理详析】</span>
+                                <span class="info-value text-yili" id="hu-judgement-yili">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-item explanation-block">
+                        <div class="block-title bian-title">
+                            <span class="block-badge badge-bian">变卦</span>
+                            <h3>《<span id="bian-judgement-name">-</span>》</h3>
+                            <span class="block-symbol" id="bian-judgement-symbol">䷼</span>
+                        </div>
+                        <div class="block-content">
+                            <div class="info-row">
+                                <span class="info-label">【卦象结构】</span>
+                                <span class="info-value" id="bian-judgement-struct">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【卦辞原文】</span>
+                                <span class="info-value text-highlight" id="bian-judgement-text">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【核心卦意】</span>
+                                <span class="info-value" id="bian-judgement-desc">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">【易理详析】</span>
+                                <span class="info-value text-yili" id="bian-judgement-yili">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 底部：八卦方位与详解百科（水墨交互体验） -->
+        <section class="bagua-encyclopedia card hidden">
+            <h2><span>🧭</span> 先天八卦易理全图</h2>
+            <div class="bagua-wheel-container">
+                <!-- 交互式八卦轮盘 -->
+                <div class="bagua-wheel">
+                    <div class="wheel-center"></div>
+                    <div class="gua-node gua-5" data-id="1"><span class="symbol">☰</span><span class="name">乾一</span></div>
+                    <div class="gua-node gua-6" data-id="2"><span class="symbol">☱</span><span class="name">兑二</span></div>
+                    <div class="gua-node gua-0" data-id="3"><span class="symbol">☲</span><span class="name">离三</span></div>
+                    <div class="gua-node gua-2" data-id="4"><span class="symbol">☳</span><span class="name">震四</span></div>
+                    <div class="gua-node gua-1" data-id="5"><span class="symbol">☴</span><span class="name">巽五</span></div>
+                    <div class="gua-node gua-4" data-id="6"><span class="symbol">☵</span><span class="name">坎六</span></div>
+                    <div class="gua-node gua-3" data-id="7"><span class="symbol">☶</span><span class="name">艮七</span></div>
+                    <div class="gua-node gua-7" data-id="8"><span class="symbol">☷</span><span class="name">坤八</span></div>
+                </div>
+
+                <!-- 八卦详细释义展示 -->
+                <div class="bagua-details" id="bagua-detail-card">
+                    <h4 id="detail-gua-title">☰ 乾卦（金）</h4>
+                    <p id="detail-gua-meaning" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        <strong>自然象意：</strong>天 / <strong>代表方向：</strong>西北方位
+                    </p>
+                    <p id="detail-gua-desc">
+                        健，代表天、君、父、刚健、圆、马、骨、金玉、高亢之所。在失物占中，常代表物品遗忘在高处或有金属光泽的容器、柜子中，极易寻回。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer>
+            <p>© 2026 Brahmaputra · 梅花易数占卜系统 · 弘扬易道</p>
+        </footer>
+    </div>
+
+    <!-- 导入占卜核心逻辑 -->
+    <script src="divination.js"></script>
+    
+    <!-- 编写交互逻辑 -->
+    <script>
+        // 自动设置今天的公历日期
+        document.getElementById('solar-date').valueAsDate = new Date();
+        
+        // 自动选择当前时间对应的时辰段
+        const currentHour = new Date().getHours();
+        let currentSlot = 1; // 默认子时
+        if (currentHour >= 23 || currentHour < 1) currentSlot = 1;
+        else currentSlot = Math.floor((currentHour + 1) / 2) + 1;
+        document.getElementById('solar-hour').value = currentSlot;
+
+        // 起卦目的 & 起卦方式 状态切换
+        let divinationPurpose = 'lost';
+        let divinationMethod = 'time';
+        let isManualTime = false;
+
+        // 占卜目的切换
+        document.querySelectorAll('#purpose-tabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#purpose-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                divinationPurpose = this.getAttribute('data-value');
+                
+                // 自动适应输入框默认占位符提示
+                const qInput = document.getElementById('divination-question');
+                if (divinationPurpose === 'lost') {
+                    qInput.placeholder = "例如：我的钥匙能找到吗？/ 我的钱包丢在客厅了吗？";
+                } else {
+                    qInput.placeholder = "例如：明天会下雨吗？/ 这次求职面试能顺利通过吗？";
+                }
+            });
+        });
+
+        // 起卦方式切换
+        document.querySelectorAll('#method-tabs .tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#method-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                divinationMethod = this.getAttribute('data-value');
+                
+                // 切换面板
+                document.querySelectorAll('.method-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById(`panel-${divinationMethod}`).classList.add('active');
+            });
+        });
+
+        // 切换手动农历/自动公历时间输入
+        document.getElementById('toggle-manual-time').addEventListener('click', function() {
+            isManualTime = !isManualTime;
+            const autoInputs = document.getElementById('auto-time-inputs');
+            const manualInputs = document.getElementById('manual-time-inputs');
+            
+            if (isManualTime) {
+                autoInputs.style.display = 'none';
+                manualInputs.style.display = 'block';
+                this.innerText = '📅 自动转换公历';
+            } else {
+                autoInputs.style.display = 'grid';
+                manualInputs.style.display = 'none';
+                this.innerText = '⚙️ 手动农历输入';
+            }
+        });
+
+        // 八卦百科交互
+        document.querySelectorAll('.gua-node').forEach(node => {
+            node.addEventListener('mouseover', function() {
+                const id = parseInt(this.getAttribute('data-id'));
+                updateBaguaEncyclopedia(id);
+            });
+        });
+
+        function updateBaguaEncyclopedia(id) {
+            const gua = TRIGRAMS[id];
+            const title = document.getElementById('detail-gua-title');
+            const meaning = document.getElementById('detail-gua-meaning');
+            const desc = document.getElementById('detail-gua-desc');
+            
+            title.innerHTML = `${gua.symbol} ${gua.name}卦（${gua.element}）`;
+            meaning.innerHTML = `<strong>自然象意：</strong>${gua.nature} &nbsp;|&nbsp; <strong>代表方向：</strong>${gua.direction}方位 &nbsp;|&nbsp; <strong>五行属性：</strong>${gua.element}`;
+            
+            desc.innerHTML = `
+                <div class="bagua-features-grid">
+                    <div class="feature-item"><strong>核心性格：</strong>${gua.character}</div>
+                    <div class="feature-item"><strong>人物意象：</strong>${gua.family}</div>
+                    <div class="feature-item"><strong>身体部位：</strong>${gua.body}</div>
+                    <div class="feature-item"><strong>代表动物：</strong>${gua.animal}</div>
+                    <div class="feature-item" style="grid-column: 1 / -1;"><strong>卦意概要：</strong>${gua.meaning}</div>
+                    <div class="feature-item" style="grid-column: 1 / -1; border-top: 1px dashed rgba(169, 56, 59, 0.2); padding-top: 0.8rem; color: var(--crimson);">
+                        <strong>万物类象与断法：</strong>${gua.symbolism}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染卦象右侧体用角色与生克弯曲箭头
+        function renderSideArrowInfo(containerId, isLowerMoving, upperElement, lowerElement, isMutual = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            let upperRole = '';
+            let lowerRole = '';
+            let upperRoleClass = '';
+            let lowerRoleClass = '';
+            
+            if (isMutual) {
+                upperRole = '互';
+                lowerRole = '互';
+                upperRoleClass = 'role-hu';
+                lowerRoleClass = 'role-hu';
+            } else {
+                if (isLowerMoving) {
+                    upperRole = '体';
+                    lowerRole = '用';
+                    upperRoleClass = 'role-ti';
+                    lowerRoleClass = 'role-yong';
+                } else {
+                    upperRole = '用';
+                    lowerRole = '体';
+                    upperRoleClass = 'role-yong';
+                    lowerRoleClass = 'role-ti';
+                }
+            }
+            
+            const upperDiv = document.createElement('div');
+            upperDiv.className = `side-role ${upperRoleClass}`;
+            upperDiv.innerText = upperRole;
+            
+            const lowerDiv = document.createElement('div');
+            lowerDiv.className = `side-role ${lowerRoleClass}`;
+            lowerDiv.innerText = lowerRole;
+            
+            const rel = getElementRelation(lowerElement, upperElement); // 下卦对上卦
+            let direction = 'none'; // 'down', 'up', 'both'
+            let relationText = '';
+            
+            if (rel === '生') {
+                direction = 'up';
+                relationText = '生';
+            } else if (rel === '被生') {
+                direction = 'down';
+                relationText = '生';
+            } else if (rel === '克') {
+                direction = 'up';
+                relationText = '克';
+            } else if (rel === '被克') {
+                direction = 'down';
+                relationText = '克';
+            } else {
+                direction = 'both';
+                relationText = '比和';
+            }
+            
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('class', 'side-arrow-svg');
+            svg.setAttribute('viewBox', '0 0 40 80');
+            
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            
+            // 下降箭头标记
+            const markerDown = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            markerDown.setAttribute('id', `arrow-down-${containerId}`);
+            markerDown.setAttribute('viewBox', '0 0 10 10');
+            markerDown.setAttribute('refX', '5');
+            markerDown.setAttribute('refY', '5');
+            markerDown.setAttribute('markerWidth', '6');
+            markerDown.setAttribute('markerHeight', '6');
+            markerDown.setAttribute('orient', 'auto-start-reverse');
+            const pathDown = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathDown.setAttribute('d', 'M 0 0 L 10 5 L 0 10 Z');
+            pathDown.setAttribute('fill', 'var(--crimson)');
+            markerDown.appendChild(pathDown);
+            defs.appendChild(markerDown);
+
+            // 上升箭头标记
+            const markerUp = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            markerUp.setAttribute('id', `arrow-up-${containerId}`);
+            markerUp.setAttribute('viewBox', '0 0 10 10');
+            markerUp.setAttribute('refX', '5');
+            markerUp.setAttribute('refY', '5');
+            markerUp.setAttribute('markerWidth', '6');
+            markerUp.setAttribute('markerHeight', '6');
+            markerUp.setAttribute('orient', 'auto-start-reverse');
+            const pathUp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            pathUp.setAttribute('d', 'M 0 0 L 10 5 L 0 10 Z');
+            pathUp.setAttribute('fill', 'var(--crimson)');
+            markerUp.appendChild(pathUp);
+            defs.appendChild(markerUp);
+            
+            svg.appendChild(defs);
+            
+            // 绘制直箭头线条，置于viewBox中心 (X=20)
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            let pathD = 'M 20 5 L 20 75';
+            path.setAttribute('d', pathD);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', 'var(--crimson)');
+            path.setAttribute('stroke-width', '1.5');
+            
+            if (direction === 'down') {
+                path.setAttribute('marker-end', `url(#arrow-down-${containerId})`);
+            } else if (direction === 'up') {
+                path.setAttribute('marker-start', `url(#arrow-up-${containerId})`);
+            } else if (direction === 'both') {
+                path.setAttribute('marker-start', `url(#arrow-up-${containerId})`);
+                path.setAttribute('marker-end', `url(#arrow-down-${containerId})`);
+            }
+            
+            svg.appendChild(path);
+            
+            // 遮罩文字背景的白色小圆圈，防止线条穿透文字（配合变大的字体）
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '20');
+            circle.setAttribute('cy', '40');
+            circle.setAttribute('r', '11');
+            circle.setAttribute('fill', '#ffffff');
+            circle.setAttribute('stroke', 'none');
+            svg.appendChild(circle);
+            
+            // 绘制生克文本（文字调大至 13px）
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', '20');
+            text.setAttribute('y', '44');
+            text.setAttribute('font-size', '13px');
+            text.setAttribute('font-weight', 'bold');
+            text.setAttribute('fill', 'var(--crimson)');
+            text.setAttribute('text-anchor', 'middle');
+            text.textContent = relationText;
+            
+            svg.appendChild(text);
+            
+            container.appendChild(upperDiv);
+            container.appendChild(svg);
+            container.appendChild(lowerDiv);
+        }
+
+        // 起卦与爻线渲染（给爻线加上五行色彩）
+        function renderHexagram(elementId, lines, movingLine = 0, lowerElement = '', upperElement = '') {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            
+            // 六爻（自底向上 1 到 6）
+            for (let i = 0; i < 6; i++) {
+                const lineContainer = document.createElement('div');
+                lineContainer.className = 'line-container';
+                if (movingLine === (i + 1)) {
+                    lineContainer.className += ' moving';
+                }
+                
+                // 爻称标注
+                const label = document.createElement('span');
+                label.className = 'line-label';
+                const yaoNames = ['初爻', '二爻', '三爻', '四爻', '五爻', '上爻'];
+                label.innerText = yaoNames[i];
+                lineContainer.appendChild(label);
+                
+                // 区分上下卦的五行属性进行着色
+                const element = (i < 3) ? lowerElement : upperElement;
+                const elemClass = element ? `elem-${element}` : '';
+                
+                // 绘制阴爻或阳爻
+                if (lines[i] === 1) {
+                    const yang = document.createElement('div');
+                    yang.className = 'yang-line ' + elemClass;
+                    lineContainer.appendChild(yang);
+                } else {
+                    const yin = document.createElement('div');
+                    yin.className = 'yin-line';
+                    const left = document.createElement('div');
+                    left.className = 'yin-part ' + elemClass;
+                    const right = document.createElement('div');
+                    right.className = 'yin-part ' + elemClass;
+                    yin.appendChild(left);
+                    yin.appendChild(right);
+                    lineContainer.appendChild(yin);
+                }
+                
+                container.appendChild(lineContainer);
+            }
+        }
+
+        // 核心占卜动作
+        document.getElementById('start-divine').addEventListener('click', function() {
+            let result;
+            const question = document.getElementById('divination-question').value;
+            
+            try {
+                if (divinationMethod === 'time') {
+                    if (isManualTime) {
+                        // 手动农历输入
+                        const yearBranch = parseInt(document.getElementById('lunar-year-branch').value);
+                        const month = parseInt(document.getElementById('lunar-month').value);
+                        const day = parseInt(document.getElementById('lunar-day').value);
+                        const hour = parseInt(document.getElementById('lunar-hour-branch').value);
+                        
+                        if (isNaN(month) || month < 1 || month > 12 || isNaN(day) || day < 1 || day > 30) {
+                            alert("请输入正确的农历月份 (1-12) 和日期 (1-30)");
+                            return;
+                        }
+                        
+                        result = PlumDivination.byTime(yearBranch, month, day, hour, question, divinationPurpose);
+                    } else {
+                        // 自动公历转换农历
+                        const dateVal = document.getElementById('solar-date').value;
+                        if (!dateVal) {
+                            alert("请选择日期");
+                            return;
+                        }
+                        const hourOrder = parseInt(document.getElementById('solar-hour').value); // 此时下拉框的值直接是地支序数 1-12
+                        
+                        const dateParts = dateVal.split('-');
+                        let year = parseInt(dateParts[0]);
+                        let month = parseInt(dateParts[1]);
+                        let day = parseInt(dateParts[2]);
+                        
+                        // 跨天子时修正：若当前系统时间在 23:00 - 00:00，且选中的是子时，自动将农历转换日期调至下一天
+                        const now = new Date();
+                        const localDateStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+                        if (hourOrder === 1 && now.getHours() === 23 && dateVal === localDateStr) {
+                            const nextDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                            year = nextDay.getFullYear();
+                            month = nextDay.getMonth() + 1;
+                            day = nextDay.getDate();
+                        }
+                        
+                        // 使用 solarlunar CDN 转换，添加对 ES6 default 导出的安全兼容解包
+                        if (typeof solarLunar !== 'undefined') {
+                            const converter = solarLunar.solar2lunar ? solarLunar : solarLunar.default;
+                            if (typeof converter.solar2lunar !== 'function') {
+                                throw new Error("solarLunar 库加载不完整，转换函数不可用。");
+                            }
+                            
+                            const lunarInfo = converter.solar2lunar(year, month, day);
+                            const gzYear = lunarInfo.gzYear; // 如 "丙午"
+                            const earthlyBranch = gzYear[1]; // "午"
+                            const yearBranchOrder = EARTHLY_BRANCHES[earthlyBranch] || 7;
+                            const lunarMonth = lunarInfo.lMonth;
+                            const lunarDay = lunarInfo.lDay;
+                            
+                            result = PlumDivination.byTime(yearBranchOrder, lunarMonth, lunarDay, hourOrder, question, divinationPurpose);
+                        } else {
+                            // CDN 未加载的离线 fallback: 自动开启手动输入
+                            alert("农历数据在线服务未能加载，已自动为您开启【手动农历输入】模式！");
+                            isManualTime = true;
+                            document.getElementById('auto-time-inputs').style.display = 'none';
+                            document.getElementById('manual-time-inputs').style.display = 'block';
+                            document.getElementById('toggle-manual-time').innerText = '📅 自动转换公历';
+                            return;
+                        }
+                    }
+                } else if (divinationMethod === 'number') {
+                    const num1 = parseInt(document.getElementById('num-upper').value);
+                    const num2 = parseInt(document.getElementById('num-lower').value);
+                    const hour = parseInt(document.getElementById('num-hour').value);
+                    
+                    if (isNaN(num1) || isNaN(num2) || num1 <= 0 || num2 <= 0) {
+                        alert("请输入正确的正整数数字");
+                        return;
+                    }
+                    
+                    result = PlumDivination.byNumbers(num1, num2, hour, question, divinationPurpose);
+                } else {
+                    const text = document.getElementById('text-phrase').value;
+                    if (!text || text.trim().length === 0) {
+                        alert("请输入您想占卜的短语或问题");
+                        return;
+                    }
+                    result = PlumDivination.byText(text, question, divinationPurpose);
+                }
+
+                // 渲染结果
+                showDivinationResult(result);
+                
+            } catch (err) {
+                alert(`起卦失败: ${err.message}`);
+                console.error(err);
+            }
+        });
+
+        // 注册返回重新占卜按钮逻辑
+        document.getElementById('btn-back-to-input').addEventListener('click', function() {
+            // 1. 显示输入卡片
+            document.getElementById('input-card').style.display = 'block';
+            
+            // 2. 为 divination-grid 重新加上 only-input 类，恢复居中单栏布局
+            document.querySelector('.divination-grid').classList.add('only-input');
+            
+            // 3. 隐藏结果面板
+            const resultDisplay = document.getElementById('result-display');
+            resultDisplay.classList.remove('active');
+            
+            // 4. 隐藏八卦百科
+            document.querySelector('.bagua-encyclopedia').classList.add('hidden');
+            
+            // 5. 滚动到页面顶部，方便重新输入
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 缓存最近一次占卜结果，供 AI 解卦使用
+        let lastResult = null;
+
+        // 渲染解析数据到页面
+        function showDivinationResult(res) {
+            lastResult = res;
+            
+            // 隐藏输入卡片，移除单栏布局类，显示百科
+            document.getElementById('input-card').style.display = 'none';
+            document.querySelector('.divination-grid').classList.remove('only-input');
+            document.querySelector('.bagua-encyclopedia').classList.remove('hidden');
+            
+            const resultDisplay = document.getElementById('result-display');
+            resultDisplay.classList.add('active');
+            
+            // 渲染天机直断
+            const directCard = document.getElementById('direct-answer-card');
+            if (res.directAnswer) {
+                directCard.style.display = 'block';
+                document.getElementById('direct-answer-text').innerText = res.directAnswer.answer;
+                document.getElementById('direct-answer-detail').innerText = res.directAnswer.detail;
+            } else {
+                directCard.style.display = 'none';
+            }
+            
+            // 1. 渲染三个卦的名称和符号
+            document.getElementById('ben-name').innerText = res.original.name;
+            document.getElementById('ben-symbol').innerText = res.original.symbol;
+            
+            // 1. 渲染三个卦的名称和符号
+            document.getElementById('hu-name').innerText = res.mutual.name;
+            document.getElementById('hu-symbol').innerText = res.mutual.symbol;
+            document.getElementById('bian-name').innerText = res.changed.name;
+            document.getElementById('bian-symbol').innerText = res.changed.symbol;
+
+            // 2. 根据五行属性给上下卦标签渲染色彩，并标明体用关系
+            const benUpper = document.getElementById('ben-upper-label');
+            const benLower = document.getElementById('ben-lower-label');
+            const huUpper = document.getElementById('hu-upper-label');
+            const huLower = document.getElementById('hu-lower-label');
+            const bianUpper = document.getElementById('bian-upper-label');
+            const bianLower = document.getElementById('bian-lower-label');
+
+            // 底部标签只写卦名和五行，体用关系将呈现在卦象右侧
+            benUpper.innerText = `${res.original.upper.name}(${res.original.upper.element})`;
+            benLower.innerText = `${res.original.lower.name}(${res.original.lower.element})`;
+            
+            bianUpper.innerText = `${res.changed.upper.name}(${res.changed.upper.element})`;
+            bianLower.innerText = `${res.changed.lower.name}(${res.changed.lower.element})`;
+            
+            benUpper.className = `trigram-badge elem-${res.original.upper.element}`;
+            benLower.className = `trigram-badge elem-${res.original.lower.element}`;
+            
+            // 互卦标签简化
+            huUpper.innerText = `${res.mutual.upper.name}(${res.mutual.upper.element})`;
+            huUpper.className = `trigram-badge elem-${res.mutual.upper.element}`;
+            
+            huLower.innerText = `${res.mutual.lower.name}(${res.mutual.lower.element})`;
+            huLower.className = `trigram-badge elem-${res.mutual.lower.element}`;
+            
+            bianUpper.className = `trigram-badge elem-${res.changed.upper.element}`;
+            bianLower.className = `trigram-badge elem-${res.changed.lower.element}`;
+
+            // 3. 画六爻图（标注动爻与五行色彩）
+            renderHexagram('ben-lines', res.original.lines, res.movingLine, res.original.lower.element, res.original.upper.element);
+            renderHexagram('hu-lines', res.mutual.lines, 0, res.mutual.lower.element, res.mutual.upper.element); 
+            renderHexagram('bian-lines', res.changed.lines, res.movingLine, res.changed.lower.element, res.changed.upper.element); 
+
+            // 渲染右侧体用角色与生克箭头
+            renderSideArrowInfo('ben-side-info', res.isLowerMoving, res.original.upper.element, res.original.lower.element, false);
+            renderSideArrowInfo('hu-side-info', false, res.mutual.upper.element, res.mutual.lower.element, true);
+            renderSideArrowInfo('bian-side-info', res.isLowerMoving, res.changed.upper.element, res.changed.lower.element, false); 
+
+            // 4. 体用分析面板
+            document.getElementById('ti-yong-summary').innerText = `排盘基准：${res.methodInfo}。动爻在【${res.movingLine}爻】。故本卦的${res.isLowerMoving ? '下' : '上'}卦为用（动卦），${res.isLowerMoving ? '上' : '下'}卦为体（静卦）。`;
+            
+            document.getElementById('ti-name').innerText = res.tiGua.name;
+            document.getElementById('ti-elem').innerText = res.tiGua.element;
+            document.getElementById('ti-elem').className = `ti-yong-elem elem-${res.tiGua.element}`;
+            
+            document.getElementById('yong-name').innerText = res.yongGua.name;
+            document.getElementById('yong-elem').innerText = res.yongGua.element;
+            document.getElementById('yong-elem').className = `ti-yong-elem elem-${res.yongGua.element}`;
+
+            // 生克符号 (体在左，用在右)
+            const relationship = getElementRelation(res.yongGua.element, res.tiGua.element);
+            let sign = '';
+            if (relationship === '生') sign = '← 生';
+            else if (relationship === '被生') sign = '生 (泄) →';
+            else if (relationship === '克') sign = '← 克';
+            else if (relationship === '被克') sign = '克 (胜) →';
+            else sign = '比和 ☯';
+            
+            document.getElementById('shengke-sign').innerText = sign;
+            document.getElementById('shengke-text').innerText = res.shengKeAnalysis;
+
+            // 5. 天机分数与吉凶标志
+            document.getElementById('score-val').innerText = `${res.score}%`;
+            const deg = (res.score / 100) * 360;
+            document.getElementById('score-progress').style.setProperty('--progress-deg', `${deg}deg`);
+            
+            const levelBadge = document.getElementById('level-badge');
+            levelBadge.innerText = res.resultLevel;
+            levelBadge.className = `badge-level level-${res.resultLevel}`;
+
+            // 6. 切换断语面板
+            const lostPanel = document.getElementById('lost-result-panel');
+            const fortunePanel = document.getElementById('fortune-result-panel');
+            
+            if (divinationPurpose === 'lost') {
+                lostPanel.style.display = 'block';
+                fortunePanel.style.display = 'none';
+                
+                document.getElementById('lost-findable').innerText = `${res.lostItemsAnalysis.findable}。${res.lostItemsAnalysis.explanation}`;
+                document.getElementById('lost-direction').innerText = res.lostItemsAnalysis.direction;
+                document.getElementById('lost-environment').innerText = res.lostItemsAnalysis.environment;
+                document.getElementById('lost-time').innerText = res.lostItemsAnalysis.timeFrame;
+            } else {
+                lostPanel.style.display = 'none';
+                fortunePanel.style.display = 'block';
+                
+                document.getElementById('fortune-summary').innerText = res.fortuneAnalysis.summary;
+                document.getElementById('fortune-stage1').innerText = res.fortuneAnalysis.stage1;
+                document.getElementById('fortune-stage2').innerText = res.fortuneAnalysis.stage2;
+                document.getElementById('fortune-stage3').innerText = res.fortuneAnalysis.stage3;
+                document.getElementById('fortune-advice').innerText = res.fortuneAnalysis.advice;
+            }
+            
+            // 渲染卦辞与易理详解
+            document.getElementById('ben-judgement-name').innerText = res.original.name;
+            document.getElementById('ben-judgement-symbol').innerText = res.original.symbol;
+            document.getElementById('ben-judgement-struct').innerText = `${res.original.upper.name}（${res.original.upper.nature}）上 / ${res.original.lower.name}（${res.original.lower.nature}）下 · 五行属${getElementRelation(res.original.lower.element, res.original.upper.element) === '比和' ? '同气' : getElementRelation(res.original.lower.element, res.original.upper.element)}`;
+            document.getElementById('ben-judgement-text').innerText = res.original.judgement;
+            document.getElementById('ben-judgement-desc').innerText = res.original.desc;
+            document.getElementById('ben-judgement-yili').innerHTML = getGuaStructureDesc(res.original.name, res.original.upper, res.original.lower);
+
+            document.getElementById('hu-judgement-name').innerText = res.mutual.name;
+            document.getElementById('hu-judgement-symbol').innerText = res.mutual.symbol;
+            document.getElementById('hu-judgement-struct').innerText = `${res.mutual.upper.name}（${res.mutual.upper.nature}）上 / ${res.mutual.lower.name}（${res.mutual.lower.nature}）下 · 五行属${getElementRelation(res.mutual.lower.element, res.mutual.upper.element) === '比和' ? '同气' : getElementRelation(res.mutual.lower.element, res.mutual.upper.element)}`;
+            document.getElementById('hu-judgement-text').innerText = res.mutual.judgement;
+            document.getElementById('hu-judgement-desc').innerText = res.mutual.desc;
+            document.getElementById('hu-judgement-yili').innerHTML = getGuaStructureDesc(res.mutual.name, res.mutual.upper, res.mutual.lower);
+
+            document.getElementById('bian-judgement-name').innerText = res.changed.name;
+            document.getElementById('bian-judgement-symbol').innerText = res.changed.symbol;
+            document.getElementById('bian-judgement-struct').innerText = `${res.changed.upper.name}（${res.changed.upper.nature}）上 / ${res.changed.lower.name}（${res.changed.lower.nature}）下 · 五行属${getElementRelation(res.changed.lower.element, res.changed.upper.element) === '比和' ? '同气' : getElementRelation(res.changed.lower.element, res.changed.upper.element)}`;
+            document.getElementById('bian-judgement-text').innerText = res.changed.judgement;
+            document.getElementById('bian-judgement-desc').innerText = res.changed.desc;
+            document.getElementById('bian-judgement-yili').innerHTML = getGuaStructureDesc(res.changed.name, res.changed.upper, res.changed.lower);
+            
+            resultDisplay.scrollIntoView({ behavior: 'smooth' });
+        }
+
+                // 64卦经典哲学与易学大象启示词典
+        const HEXAGRAM_PHILOSOPHY = {
+            '乾为天': '大哉乾元，万物资始，乃统天。此卦象征纯阳刚健、天道循环、自强不息。君子当法天之刚健，以恒心和正道开拓事业，名利双收。但在极盛之时需防“亢龙有悔”，戒骄戒躁，守正防盈。',
+            '天泽履': '履虎尾，不咥人，亨。此卦象征步履艰难、行险而顺。天在上而泽在下，尊卑有序。占得此卦，如履薄冰，需以谦逊、礼貌、温和的态度应对危机，方能化险为夷，转危为安。',
+            '天火同人': '同人于野，亨。此卦象征志同道合、通力合作。火性炎上而天体清高，两者光明相照。君子当突破狭隘的地域与成见，广结善缘，与人精诚合作，方能成就大业。',
+            '天雷无妄': '无妄，元亨，利贞。此卦象征顺应天命、防范意外。天下雷行，万物不敢妄动。占得此卦宜守静，不可有非分之想，防范突发灾祸，以天道中正之德行渡过难关。',
+            '天风姤': '姤，女壮，勿用取女。此卦象征邂逅相遇、阴长阳消。天下有风，风无孔不入。防范意外相遇带来的诱惑，或内部小人势力暗中滋生，行事需谨慎，防微杜渐，以柔克刚。',
+            '天水讼': '讼，有孚窒惕，中吉，终凶。此卦象征口舌争端、违行不合。天清上升，水滴下流，背道而驰。凡事以和为贵，争斗必伤和气，宜适可而止，防口舌讼事之累。',
+            '天山遁': '遁，亨，小利贞。此卦象征退避避险、隐退蓄力。天下有山，山高止于天。当前小人势盛，君子当主动退守，保存实力，不可做无谓的硬拼，以退为进乃大智慧。',
+            '天地否': '否之匪人，不利君子贞。此卦象征闭塞不通、上下不交。天清在上，地浊在下，两者互不交通，阳气上升而阴气下沉，万物凋零。宜深挖根基，隐忍韬光，静待时机。',
+            '泽天夬': '夬，扬于王庭，孚号有厉。此卦象征决断清除、破釜沉舟。泽水上升于天，即将决堤。君子当以光明磊落之手段，果断排除险阻和小人，同时防范过刚易折。',
+            '兑为泽': '兑，亨，利贞。此卦象征喜悦相处、言谈得益。两泽相连，水源不绝。君子当与朋友讲习学问，分享喜悦。但需注意防范多言失言，防口舌是非与轻浮之举。',
+            '泽火革': '革，己日乃孚，元亨利贞。此卦象征变革改新、顺应潮流。泽中有火，水火不相容，必生变革。凡事当推陈出新，顺应时代发展，主动革除弊端，方有转机。',
+            '泽雷随': '随，元亨利贞，无咎。此卦象征随遇而安、顺势而为。泽中有雷，雷声随泽而隐。君子当顺应天时与他人，多听取善意建议，择善而从，谋事可成。',
+            '泽风大过': '大过，栋挠，利有攸往。此卦象征负担沉重、阳刚过盛。泽水淹没木林，危如累卵。面临极限挑战，需要有破釜沉舟的勇气与智慧，避开锋芒，寻求分担。',
+            '泽水困': '困，亨，贞，大人吉，无咎。此卦象征穷困守静、坚守正道。泽中无水，水漏于下，干涸之象。君子当在逆境中磨砺心志，不失操守，静待泉源复苏。',
+            '泽山咸': '咸，亨，利贞，取女吉。此卦象征相互感应、逆耳忠言。泽在山上，山承泽水，上下感应。在人际与感情中，真诚是感应的核心，心诚则灵，万事皆成。',
+            '泽地萃': '萃，亨，王假有庙。此卦象征群英荟萃、人才聚集。泽在地上，水聚成川。宜凝聚人心，与他人强强联合，借助团队或平台的力量，大展宏图。',
+            '火天大有': '大有，元亨。此卦象征富有四海、收获丰厚. 火在天上，烈日高悬，普照万物。得此卦者运势极旺，但需顺天应人，多施恩惠，防骄奢淫逸，保持谦虚。',
+            '火泽睽': '睽，小事吉。此卦象征乖异不合、求同存异。火性炎上，泽水润下，志向相左。大事难成，只宜小事。应在分歧中寻找共同点，包容差异。',
+            '离为火': '离，利贞，亨，畜牝牛吉。此卦象征光明美丽、附着依托。双火相照，照耀四方。君子当继明照于四方，行事需坚守中正，避免急躁暴怒，依附正道方吉。',
+            '火雷噬嗑': '噬嗑，亨，利用狱。此卦象征咬碎障碍、强制消除。雷电交合，震慑万物。面临阻碍或小人破坏，必须刚柔并济，用严明的手段果断排除干扰。',
+            '火风鼎': '鼎，元吉，亨。此卦象征三足鼎立、革故鼎新。木上有火，鼎煮食物，贤人受重用。此卦主升迁之喜，宜任用贤能，改组更新，事业根基稳固。',
+            '火水未济': '未济，亨，小狐汔济。此卦象征事情未完、未来可期。水在火下，水火未交，处于混乱摸索期。虽然尚未成功，但充满生机，行事须格外小心。',
+            '火山旅': '旅，小亨，旅贞吉。此卦象征在外奔波、羁旅飘零。山上有火，火行迅速，客无定所。宜谦逊守分，多修德行，不可高傲自大，谨防财物损失。',
+            '火地晋': '晋，康侯用锡马蕃庶。此卦象征如日中天、高升晋爵。日出地上，顺而丽。运势上升，容易获得长辈或领导的重用与提携，步步高升。',
+            '雷天大壮': '大壮，利贞。此卦象征力量强盛、声势浩大。雷在天上，声震百里。阳气极其旺盛，但切忌盲目冲动、硬碰硬，防范“羝羊触藩”，宜守礼自律。',
+            '雷泽归妹': '归妹，征凶，无攸利。此卦象征行事颠倒、违反规则。泽上有雷，妇人出嫁，名不正言不顺。盲目追求结果容易招致凶险，需端正动机，依循正道。',
+            '雷火丰': '丰，亨，王假之。此卦象征盛大丰盈、财源广进。雷电皆至，光大普照。正处于运势巅峰，但需提防“日中则昃”，多行施舍，防盛极而衰。',
+            '震为雷': '震，亨，震来虩虩。此卦象征震惊百里、警醒改革。双雷重叠，震撼天地。虽然面临突发变故，但君子当恐惧修省，保持镇定，惊恐过后终得安宁。',
+            '雷风恒': '恒，亨，无咎，利贞。此卦象征恒久不变、守正不阿。雷风相与，恒常之道。占得此卦宜坚守初衷，持之以恒，不可见异思迁，稳定推进方有所成。',
+            '雷水解': '解，利西南。无所往，其来复吉。此卦象征解除困难、化险为夷。雷雨大作，万物解冻。困境得以解脱，利于积极行动，解决历史遗留问题，重获新生。',
+            '雷山小过': '小过，亨，利贞。可小事，不可大事。此卦象征小有过越、宜下不宜上。雷在山上升，声音过高。行事宜谦虚克制，做小事吉，强做大事易招致挫折。',
+            '雷地豫': '豫，利建侯行师。此卦象征顺时依势、愉悦安乐。雷出地奋，万物复苏。人心所向，适宜大展宏图。宜居安思危，用乐和之气凝聚团队。',
+            '风天小畜': '小畜，亨。密云不雨，自我西郊。此卦象征蓄积力量、待机而动。风行天上，云气积聚却未下雨。当前力量微薄，不宜强出头，应默默积累。',
+            '风泽中孚': '中孚，豚鱼吉，利涉大川。此卦象征诚信感物、深入人心。泽上有风，水面波纹随风而动。以诚待人，则无往不利，最宜合伙、求名与缔结姻缘。',
+            '风火家人': '家人，利女贞。此卦象征治家有道、内外有序。风自火出，火烈风生。宜整顿内部，确立规矩。巩固大后方，家和万事兴，不可盲目向外拓张。',
+            '风雷益': '益，利有攸往，利涉大川。此卦象征损上益下、财富增长。风雷激荡，互相增益。运势亨通，多得外界或长辈助力，宜趁机积极开拓，大有作为。',
+            '巽为风': '巽，小亨，利有攸往。此卦象征谦逊柔顺、随风逐势。双风相随，无孔不入。运势起伏多变，宜借力打力，顺从强者，不可固执己见。',
+            '风水涣': '涣，亨。此卦象征人心涣散、面临离散。风行水上，水波激散。面临危机，君子当以大公无私的德行凝聚人心，重组团队，化解分裂之兆。',
+            '风山渐': '渐，女归吉，利贞。此卦象征循序渐进、步步高升。山上有木，渐次成长。发展平稳，积跬步至千里。求名、求职、姻缘等皆为稳步上升之大吉。',
+            '风地观': '观，盥而不荐，有孚颙若。此卦象征静观其变、反观自身。风行地上，省方观民。不宜盲目出手，应多做调研和观察，冷静规划，反思自我。',
+            '水天需': '需，有孚，光亨，贞吉。此卦象征蓄势待发、等待时机。云气在天上，尚未下雨。前方有险，宜饮食宴乐，保持耐心，时机一到自然顺理成章。',
+            '水泽节': '节，亨。苦节不可贞。此卦象征适度节制、规矩分明。泽上有水，水满则溢，故需堤防节制。节约与克制是美德，但不可过分严苛，宜中庸。',
+            '水火既济': '既济，亨小，利贞。初吉终乱。此卦象征功成名就、大局已定。水在火上，水火交融，完美平衡。但防“盛极必衰”，必须提高警惕预防隐患。',
+            '水雷屯': '屯，元亨利贞，勿用有攸往。此卦象征破土艰难、万事开头难。云雷激荡，草木初生。当前处境多艰阻，宜坚守岗位，寻找贤人辅助，不可妄动。',
+            '水风井': '井，改邑不改井，无丧无得。此卦象征井水不息、守常不移。木入水下，汲水出井。细水长流，利于长线稳步经营，根基稳固，有源源不断的收获。',
+            '坎为水': '习坎，有孚，维心亨。此卦象征重重险阻、深陷重围。双水重叠，险阻重重。当前面临重大危机困境，须有如水般坚忍不拔之志，坚守诚信突围。',
+            '水山蹇': '蹇，利西南，不利东北。此卦象征艰难险阻、寸步难行。山上有水，险阻在前。万不可冒险强行，应退守反省，寻求长辈或贵人指引方能解困。',
+            '水地比': '比，吉。原筮元永贞。此卦象征依附相亲、团结致胜。地上有水，水土相融。人际交往大吉，适宜拓展同盟，合作共赢，获得贵人扶持。',
+            '山天大畜': '大畜，利贞。不家食吉。此卦象征大有所积、蓄德行能。天在山中，蕴藏无限。实力厚实，宜大展脚，适合大宗投资、重大决策与考试求官。',
+            '山泽损': '损，有孚，元吉，无咎。此卦象征减损自私、损己利人。山下有泽，泽水浸损山脚。虽然目前有小损失或需要付出，但吃亏是福，为长远蓄力。',
+            '山火贲': '贲，亨。小利有攸往。此卦象征文饰装点、宣介包装。山下有火，火照山林。利于宣传、相亲、面试等外在展示，但防华而不实，需充实内涵。',
+            '山雷颐': '颐，贞吉。观颐，自求口实。此卦象征休养生息、颐养身心。山下有雷，草木繁茂。宜注重饮食起居，保养身体，同时防范祸从口出，谨言慎行。',
+            '山风蛊': '蛊，元亨，利涉大川。此卦象征积弊已深、亟需整顿。山下有风，风遇山阻，空气败坏。积弊已到不得不改之时，需果断采取大刀阔斧改革。',
+            '山水蒙': '蒙，亨。匪我求童蒙，童蒙求我。此卦象征启蒙教育、懵懂无知。山下有泉，泉水出山，前途未知。宜虚心向导师学习，忌盲目主观决策。',
+            '艮为山': '艮，其背，不获其身。此卦象征行止有度、止其所当止。双山重叠，重重阻隔。不宜盲目进取，应坚守分寸，在停滞中沉淀自我，以静制动。',
+            '山地剥': '剥，不利有攸往。此卦象征根基剥蚀、山崩地裂。山附于地，剥蚀殆尽。形势严峻，防小人暗害或重大失利，宜隐藏退避，不可做任何激进行动。',
+            '地天泰': '泰，小往大来，吉，亨。此卦象征天地交泰、通泰繁荣。坤地在上，乾天在下，乾清上升，坤浊下降，阴阳融通。万事顺遂，宜趁势有为，但也防乐极生悲。',
+            '地泽临': '临，元亨利贞。至于八月有凶。此卦象征居高临下、好运临门。泽上有地，水气滋润。运势极佳，宜积极主动。但需居安思危，防范后期运势下滑。',
+            '地火明夷': '明夷，利艰贞。此卦象征黑暗降临、光明受损。日入地中，光明受伤。处于艰难险恶环境，宜隐忍韬光，忍辱负重，隐藏锋芒以避灾祸。',
+            '地雷复': '复，亨。出入无疾，朋来无咎。此卦象征一阳复始、触底反弹。雷在地中，生机渐现。运势慢慢复苏，情况开始好转，宜循序渐进，不可操之过急。',
+            '地风升': '升，元亨。南征吉。此卦象征逐步升迁、积小成大。地中有木，顺而上行。事业平稳上升，贵人重用，顺势而为，积少成多，前程大好。',
+            '地水师': '师，贞，丈人吉。此卦象征统率大众、严明纪律。地中有水，容纳深广。面临竞争或纠纷，需严密组织、严守纪律和依归正道方能取得胜利。',
+            '地山谦': '谦，亨，君子有终。此卦象征虚怀若谷、谦受益满。地中有山，山高藏地，外柔内刚。万事不争，反而获得最大利益，最得贵人长辈喜爱支持。',
+            '坤为地': '坤，元亨，利牝马之贞。此卦象征顺从厚德、载物无疆。双地相叠，至阴柔顺。宜守不宜攻，顺从天时与合作方，包容万物，以静制动。'
+        };
+
+
+        // 易理分析结构描述文字生成器
+        function getGuaStructureDesc(name, upper, lower) {
+            const key = name;
+            const philosophy = HEXAGRAM_PHILOSOPHY[key] || "易理流变，乾坤感应，顺应自然规律。";
+            
+            const relation = getElementRelation(lower.element, upper.element); // 下卦对上卦
+            let shengkeStr = "";
+            if (relation === '生') shengkeStr = `下卦${lower.name}（${lower.element}）生上卦${upper.name}（${upper.element}），属于【下生上】，根基滋养上方，运势吉顺，多得贵人或外界助力；`;
+            else if (relation === '被生') shengkeStr = `上卦${upper.name}（${upper.element}）生下卦${lower.name}（${lower.element}），属于【上生下】，上方恩泽下泄，虽有耗泄但大体安稳；`;
+            else if (relation === '克') shengkeStr = `下卦${lower.name}（${lower.element}）克上卦${upper.name}（${upper.element}），属于【下克上】，内外交兵，求谋之路上略有阻碍与波折；`;
+            else if (relation === '被克') shengkeStr = `上卦${upper.name}（${upper.element}）克下卦${lower.name}（${lower.element}），属于【上克下】，上方压制下方，局势受制，需稳妥隐忍，防范受损；`;
+            else shengkeStr = `上下五行同属${upper.element}，属于【体用同气/比和】，局势稳固，互为支撑，多得同僚或平辈协助；`;
+
+            let natureDetail = "";
+            if (upper.name === lower.name) {
+                natureDetail = `此卦为八纯卦之一。上下皆为【${upper.name}】卦，代表双重【${upper.nature}】意象相叠，力量极其纯正。在易理中代表“${upper.meaning.split('，')[0]}”的能量发挥到极致，气场深厚宏大，但亦需提防物极必反。`;
+            } else {
+                natureDetail = `上卦为【${upper.name}（${upper.nature}）】，下卦为【${lower.name}（${lower.nature}）】。卦象呈现出“${upper.nature}${lower.nature}”的交感交融之景，象意表现为【${upper.meaning.split('，')[0]}】与【${lower.meaning.split('，')[0]}】相互感应。`;
+            }
+
+            return `
+                <div style="margin-bottom: 0.8rem; line-height: 1.6;">
+                    <strong style="color: var(--crimson);">【卦象象意】</strong><br>
+                    ${natureDetail}${shengkeStr}
+                </div>
+                <div style="line-height: 1.6;">
+                    <strong style="color: var(--crimson);">【哲学与易理启示】</strong><br>
+                    ${philosophy}
+                </div>
+            `;
+        }
+
+        // 默认初始化离卦百科展示
+        updateBaguaEncyclopedia(3);
+
+
+    </script>
+</body>
+</html>

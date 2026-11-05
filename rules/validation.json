@@ -1,0 +1,92 @@
+{
+  "prepared_date": "2026-11-05",
+  "policy": "DIRECT",
+  "upstream_auto_update": false,
+  "file": "all-direct.list",
+  "count": 3838,
+  "duplicates_removed": 36,
+  "sha256": "8b4b7632b9b770e4ab6c408052c42765c15464f78bf276f3a48ab729212bea0a",
+  "rule_types": {
+    "DOMAIN": 77,
+    "DOMAIN-SUFFIX": 3714,
+    "DOMAIN-KEYWORD": 9,
+    "IP-CIDR": 34,
+    "IP-CIDR6": 4
+  },
+  "sources": [
+    {
+      "name": "blackmatrix7 China",
+      "url": "https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Clash/China/China_Classical.yaml",
+      "input_sha256": "dfa24df5dec5bc95de5fb17ccbba97ede2e124381e8c35c8a95e4e7aecbb17b8",
+      "input_count": 3721,
+      "compatible_count": 3721,
+      "excluded": []
+    },
+    {
+      "name": "blackmatrix7 WeChat",
+      "url": "https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Clash/WeChat/WeChat.yaml",
+      "input_sha256": "e08a12fd9c2e0ade1854e279716e8f3832cbf9eec56227c7285ce0a9b3c45844",
+      "input_count": 31,
+      "compatible_count": 30,
+      "excluded": [
+        {
+          "rule": "IP-ASN,132203",
+          "reason": "outside observed compatible rule types"
+        }
+      ]
+    },
+    {
+      "name": "CHENHUI-X WeChat miniapp",
+      "url": "https://gist.githubusercontent.com/CHENHUI-X/531e1aed9591067ad255945ffdec5158/raw/0ae59eda829618b9c5a04a13eed92237cc4ead43/wechat-direct.stoverride",
+      "input_sha256": "293e476e523c08a889f95026d6a0577e7b7a5ee35a35406e71f07435a07fe6dd",
+      "input_count": 134,
+      "compatible_count": 123,
+      "excluded": [
+        {
+          "rule": "DOMAIN-REGEX,^(?:[a-z0-9-]+\\.)?cos\\.ap-(?:beijing(?:-1|-fsi)?|nanjing|shanghai(?:-fsi)?|guangzhou|chengdu|chongqing|shenzhen-fsi)\\.myqcloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^(?:[a-z0-9-]+\\.)?ci\\.ap-(?:beijing(?:-1|-fsi)?|nanjing|shanghai(?:-fsi)?|guangzhou|chengdu|chongqing|shenzhen-fsi)\\.myqcloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^(?:[a-z0-9-]+\\.)?oss-cn-(?:hangzhou|shanghai|nanjing|fuzhou|wuhan-lr|qingdao|beijing|zhangjiakou|huhehaote|wulanchabu|shenzhen|heyuan|guangzhou|chengdu|zhongwei)\\.aliyuncs\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^(?:[a-z0-9-]+\\.)?cn-(?:hangzhou|shanghai|nanjing|fuzhou|wuhan-lr|qingdao|beijing|zhangjiakou|huhehaote|wulanchabu|shenzhen|heyuan|guangzhou|chengdu|zhongwei)\\.oss\\.aliyuncs\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^(?:[a-z0-9-]+\\.)?img-cn-(?:hangzhou|qingdao|beijing|shenzhen|shanghai)\\.aliyuncs\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^[0-9]+w4c\\.my-imcloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^[0-9]+-cn\\.rich\\.my-imcloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^[a-z0-9-]+\\.obs\\.cn-(?:north-(?:4|9|12)|east-(?:3|4|5)|south-(?:1|4)|southwest-2)\\.myhuaweicloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^[a-z0-9-]+\\.obs\\.dualstack\\.cn-(?:north-(?:4|9|12)|east-(?:3|4|5)|south-1|southwest-2)\\.myhuaweicloud\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^[a-z0-9-]+\\.tos-cn-(?:beijing|guangzhou|shanghai)\\.volces\\.(?:com|cn)$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        },
+        {
+          "rule": "DOMAIN-REGEX,^vod-[a-z0-9-]+\\.oss-accelerate\\.aliyuncs\\.com$,DIRECT",
+          "reason": "outside observed compatible rule types"
+        }
+      ]
+    }
+  ]
+}

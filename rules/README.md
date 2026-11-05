@@ -5,10 +5,10 @@
 ## 导入地址
 
 ```text
-https://raw.githubusercontent.com/a2492231547-creator/Antigravity_Divination/wmsxwd-rules/rules/all-direct.list
+https://raw.githubusercontent.com/a2492231547-creator/Antigravity_Divination/wmsxwd-rules/rules/all-direct.yaml
 ```
 
-只导入这一份合并版，不要叠加同来源的旧规则。
+只导入这一份合并版，不要叠加同来源的旧规则。YAML 使用 rules 数组；all-direct.list 是内容相同的纯文本备用版本。
 
 ## 内容
 

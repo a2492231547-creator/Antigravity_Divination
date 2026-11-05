@@ -2,10 +2,10 @@
   "prepared_date": "2026-11-05",
   "policy": "DIRECT",
   "upstream_auto_update": false,
-  "file": "all-direct.list",
+  "file": "all-direct.yaml",
   "count": 3838,
   "duplicates_removed": 36,
-  "sha256": "8b4b7632b9b770e4ab6c408052c42765c15464f78bf276f3a48ab729212bea0a",
+  "sha256": "d5d40fbd7c3e5f3e69c404ddd86c61a2ceda73e7abcbb10dc06323f5782ccd97",
   "rule_types": {
     "DOMAIN": 77,
     "DOMAIN-SUFFIX": 3714,
@@ -88,5 +88,11 @@
         }
       ]
     }
-  ]
+  ],
+  "format": "yaml rules array",
+  "raw_http_verified": true,
+  "text_alternative": {
+    "file": "all-direct.list",
+    "sha256": "8b4b7632b9b770e4ab6c408052c42765c15464f78bf276f3a48ab729212bea0a"
+  }
 }
